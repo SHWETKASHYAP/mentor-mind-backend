@@ -1,33 +1,43 @@
-//this file recieves the app.js file and starts the server
+// server.js
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+
+import app from "./src/app.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 👇 FORCE dotenv to load backend/.env
-dotenv.config({
-  path: path.resolve(__dirname, ".env"),
-});
+// Load env explicitly
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
+const PORT = process.env.PORT || 10000;
 
-import app from "./src/app.js";
-import mongoose from "mongoose";
+// ✅ CORS — SAFE + RENDER COMPATIBLE
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://mentor-mind-frontend.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false, // IMPORTANT
+  })
+);
 
-
-const PORT = process.env.PORT || 5000;
-
+// DB + Server
 mongoose
-    .connect(process.env.MONGO_URL)
-    .then(() => {
-        console.log("MongoDB Connected");
-        app.listen(PORT, "0.0.0.0", () => {
-            console.log(`Server running on port ${PORT}`);
-        });
-
-    })
-    .catch(err => {
-        console.error("DB connection failed", err);
-        process.exit(1);
-    })
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
+  });
