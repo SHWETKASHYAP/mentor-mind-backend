@@ -1,5 +1,4 @@
 import express from "express";
-import cors from "cors";
 
 import authRoutes from "./routes/authRoutes.js";
 import protectedRoutes from "./routes/protectedRoutes.js";
@@ -10,18 +9,9 @@ import planRoutes from "./routes/planRoutes.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://mentor-mind-frontend.vercel.app",
-    ],
-    credentials: true,
-  })
-);
-
 app.use(express.json());
 
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/subjects", subjectRoutes);
@@ -29,6 +19,7 @@ app.use("/api/availability", availabilityRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/plans", planRoutes);
 
+// Health check
 app.get("/health", (req, res) => {
   console.log("Health route hit");
   res.json({ status: "OK" });
