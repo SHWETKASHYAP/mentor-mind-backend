@@ -1,5 +1,5 @@
 import express from "express";
-
+import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import protectedRoutes from "./routes/protectedRoutes.js";
 import subjectRoutes from "./routes/subjectRoutes.js";
