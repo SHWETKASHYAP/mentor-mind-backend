@@ -9,6 +9,18 @@ import planRoutes from "./routes/planRoutes.js";
 
 const app = express();
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://mentormind-delta.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false, // IMPORTANT
+  })
+);
+
 app.use(express.json());
 
 // Routes
